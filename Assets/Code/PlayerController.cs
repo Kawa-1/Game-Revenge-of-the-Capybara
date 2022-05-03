@@ -24,14 +24,14 @@ public class PlayerController : MonoBehaviour
     
     void Start()
     {
-        CursorLocked();
+        
         ammo = maxAmmo;
         damageReductionFactor = pistolSeting.DamageReductionFactor;
         maxDistanceWhereMaxDamage = pistolSeting.MaxDistanceWhereMaxDamage;
         damageGun = pistolSeting.Damage;
         aimingGun = pistolSeting.AimingGunImage;
-
-
+        
+        
     }
     
     int howManyTimesPlayerCanJump;
@@ -46,6 +46,11 @@ public class PlayerController : MonoBehaviour
         relodAmmo();
         
     }
+    
+    //void Awake() 
+    //{
+     ///   DontDestroyOnLoad(transform.gameObject);
+    //}
 
     private void Jump()
     {
@@ -88,12 +93,7 @@ public class PlayerController : MonoBehaviour
     bool IsGrounded() {
         return Physics.Raycast(transform.position, Vector3.down, 1.1f) && rigidbody.velocity.y <= 0;
     }
-
-    void CursorLocked()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
+    
 
     void GunShoot()
     {

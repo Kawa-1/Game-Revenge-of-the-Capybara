@@ -9,6 +9,7 @@ public class PlayerInterface : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private RawImage aimingGun;
     [SerializeField] private TextMeshProUGUI amountOfAmmo;
+    [SerializeField] private EndGame endGame;
     
     void Start()
     {
@@ -24,7 +25,7 @@ public class PlayerInterface : MonoBehaviour
 
     void setPointOnPlayerScreen()
     {
-        pointsText.SetText("Points: " + playerController.getPoints());
+        pointsText.SetText("Points: " + playerController.getPoints() + "\n Time: " + endGame.time);
     }
 
     public void showAimingGun()
