@@ -32,6 +32,13 @@ public class PlayerController : MonoBehaviour
         aimingGun = pistolSeting.AimingGunImage;
         
         
+        PlayerPrefs.DeleteAll();
+
+        
+        
+      
+        
+        
     }
     
     int howManyTimesPlayerCanJump;

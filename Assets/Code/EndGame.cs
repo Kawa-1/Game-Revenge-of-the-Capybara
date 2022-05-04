@@ -13,21 +13,23 @@ public class EndGame : MonoBehaviour
     public float time = 0;
     void Start()
     {
-        
     }
 
     
     void Update()
     {
         time += Time.deltaTime;
-        
-        if (playerController.getPoints() > pointsToEndGame)
+        if (LevelSetting.timeRace)
         {
-            DateBetwenScene.points = playerController.getPoints();
-            DateBetwenScene.time = this.time;
-            
-            sceneSwitcher.endGame();
+            if (playerController.getPoints() > pointsToEndGame)
+           {
+               DateBetwenScene.points = playerController.getPoints();
+               DateBetwenScene.time = this.time;
+               
+               sceneSwitcher.endGame();
+           } 
         }
+       
     }
 
     

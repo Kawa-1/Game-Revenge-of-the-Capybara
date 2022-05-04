@@ -4,8 +4,9 @@ using UnityEngine.SceneManagement;
 public class SceneSwitcher : MonoBehaviour
 {
    
-    public void StartGame()
-    {   
+    public void startTimeRaceLevel()
+    {
+        LevelSetting.timeRace = true;
         cursorLocked();
         SceneManager.LoadScene("Game");
        
