@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     
     void Start()
     {
-        
+        PlayerPrefs.SetFloat("bestTime",1000);
         ammo = maxAmmo;
         damageReductionFactor = pistolSeting.DamageReductionFactor;
         maxDistanceWhereMaxDamage = pistolSeting.MaxDistanceWhereMaxDamage;
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
         aimingGun = pistolSeting.AimingGunImage;
         
         
-        PlayerPrefs.DeleteAll();
+
 
         
         

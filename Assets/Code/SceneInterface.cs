@@ -13,16 +13,13 @@ public class SceneInterface : MonoBehaviour
     
     void Update()
     {
-        float bestTimeForEver;
+        float bestTimeForEver = PlayerPrefs.GetFloat("bestTime");
         
         if (PlayerPrefs.GetFloat("bestTime") == null)
         {
-            bestTimeForEver = 0;
+            bestTimeForEver = 10000;
         }
-        else
-        {
-            bestTimeForEver = PlayerPrefs.GetFloat("bestTime");
-        }
+        
         
         text.SetText("Your points: " + DateBetwenScene.points + "\n Your time: " + DateBetwenScene.time);
         if (DateBetwenScene.time < bestTimeForEver)
