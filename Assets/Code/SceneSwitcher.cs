@@ -1,12 +1,20 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour
 {
-   
+    private void Start()
+    {
+       
+    }
+
     public void startTimeRaceLevel()
     {
-        LevelSetting.timeRace = true;
+        DateBetwenScene.points = 0;
+        DateBetwenScene.time = 0;
+        LevelSetting.isPointRaceMode = true;
+        LevelSetting.isBigHuntMode = false;
         cursorLocked();
         SceneManager.LoadScene("Game");
        
@@ -25,6 +33,11 @@ public class SceneSwitcher : MonoBehaviour
         cursorUNLocked();
         SceneManager.LoadScene("EndGame");
     }
+    public void youLoose()
+    {   
+        cursorUNLocked();
+        SceneManager.LoadScene("GameOver");
+    }
     void cursorLocked()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -35,4 +48,24 @@ public class SceneSwitcher : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
+
+    public void loadMenu()
+    {
+        cursorUNLocked();
+        SceneManager.LoadScene("Menu");
+    }
+
+    public void startBigHuntRace()
+    {
+        DateBetwenScene.points = 0;
+        DateBetwenScene.time = 0;
+        LevelSetting.isBigHuntMode = true;
+        LevelSetting.isPointRaceMode = false;
+
+        LevelSetting.isGenerate = false;
+        cursorLocked();
+        SceneManager.LoadScene("Game");
+    }
+    
+    
 }

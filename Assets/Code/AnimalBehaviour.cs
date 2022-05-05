@@ -80,24 +80,20 @@ public class AnimalBehaviour : MonoBehaviour
     public void ShotOnAnimal(string shotPartsOfAnimal, float damage)
     {
         
-        Debug.Log("live= " + live);
+       
         if (shotPartsOfAnimal.Equals("Head"))
         {
-            Debug.Log("Shot on Head");
             ShotOnHead(damage);
         }
         if (shotPartsOfAnimal.Equals("Body"))
         {
-            Debug.Log("Shot on Body");
-
             ShotOnBody(damage);
         }
         if (shotPartsOfAnimal.Equals("Leg"))
         {
-            Debug.Log("Shot on Leg");
             ShotOnLeg(damage);
         }
-        Debug.Log("live after = " + live);
+        
     }
 
     private void ShotOnHead(float damage)
@@ -154,8 +150,31 @@ public class AnimalBehaviour : MonoBehaviour
         }
         playerController.addPoints(recivedPoints);
         creatDeadAnimal();
+        
+    
+        addAmountKillAnimal();
         Destroy(gameObject);
         
+    }
+
+    private void addAmountKillAnimal()
+    {
+        if (isDeer)
+        {
+            LevelSetting.deerKill += 1;
+        }
+        if (isRoe)
+        {
+            LevelSetting.roeKill += 1;
+        }
+        if (isSheep)
+        {
+            LevelSetting.sheepKill += 1;
+        }
+        if (isBoar)
+        {
+            LevelSetting.boarKill += 1;
+        }
     }
 
     public void setPlayerController(PlayerController player)

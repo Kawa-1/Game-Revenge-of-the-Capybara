@@ -6,5 +6,5 @@ public class DateBetwenScene : MonoBehaviour
 {
    static public float points;
    static public float time;
-   
+  
 }
