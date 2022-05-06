@@ -27,6 +27,11 @@ public class SceneInterface : MonoBehaviour
     private string sole;
     void Start()
     {
+
+        if (LevelSetting.youLose)
+        {
+            return;
+        }
         
         if (LevelSetting.isBigHuntMode)
         {

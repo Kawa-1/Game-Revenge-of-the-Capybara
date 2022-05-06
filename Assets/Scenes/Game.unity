@@ -1631,7 +1631,7 @@ MonoBehaviour:
   playerController: {fileID: 59053240}
   sceneSwitcher: {fileID: 1379700604}
   dateBetwenScene: {fileID: 879241450}
-  pointsToEndGame: 1
+  pointsToEndGame: 150
   time: 0
 --- !u!114 &1040509243 stripped
 MonoBehaviour:
