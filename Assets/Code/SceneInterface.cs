@@ -28,10 +28,7 @@ public class SceneInterface : MonoBehaviour
     void Start()
     {
 
-        if (LevelSetting.youLose)
-        {
-            return;
-        }
+       
         
         if (LevelSetting.isBigHuntMode)
         {
@@ -94,6 +91,11 @@ public class SceneInterface : MonoBehaviour
         if (LevelSetting.isPointRaceMode)
         {
             newRaceTimeGame.gameObject.SetActive(true);
+        }
+        
+        if (LevelSetting.youLose)
+        {
+            return;
         }
 
         playerNameInputField.characterLimit = 8;

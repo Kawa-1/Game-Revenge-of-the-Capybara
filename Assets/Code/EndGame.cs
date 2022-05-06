@@ -27,13 +27,13 @@ public class EndGame : MonoBehaviour
            {
                DateBetwenScene.points = playerController.getPoints();
                DateBetwenScene.time = this.time;
-               
+               LevelSetting.youLose = false;
                sceneSwitcher.endGame();
            } 
         } 
         if (LevelSetting.isBigHuntMode)
         {
-            Debug.Log("hunt");
+            LevelSetting.youLose = false;
 
             if (LevelSetting.deerKill > LevelSetting.deerToKillAmount)
             {
@@ -80,6 +80,7 @@ public class EndGame : MonoBehaviour
 
                             DateBetwenScene.points = playerController.getPoints();
                             DateBetwenScene.time = this.time;
+                            LevelSetting.youLose = false;
                             sceneSwitcher.endGame();
                         }
                     }
