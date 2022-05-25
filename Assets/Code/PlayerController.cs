@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerInterface playerInterface;
     [SerializeField] private float maxAmmo;
     [SerializeField] private PistolSeting pistolSeting;
+    [SerializeField] private AudioSource shootAudioControler;
+    [SerializeField] private AudioSource reloadAudiController;
 
     private float damageReductionFactor;
     private float maxDistanceWhereMaxDamage;
@@ -21,6 +23,11 @@ public class PlayerController : MonoBehaviour
 
     private float points = 0;
     private float ammo = 0 ;
+
+    private bool justReload = false;
+    private bool canYouShootAfterRelod = true;
+
+    private float timeAfterReload = 0;
     
     void Start()
     {
@@ -30,7 +37,6 @@ public class PlayerController : MonoBehaviour
         maxDistanceWhereMaxDamage = pistolSeting.MaxDistanceWhereMaxDamage;
         damageGun = pistolSeting.Damage;
         aimingGun = pistolSeting.AimingGunImage;
-        
         
 
 
@@ -51,6 +57,8 @@ public class PlayerController : MonoBehaviour
         
         GunShoot();
         relodAmmo();
+        countTimeAfterReload();
+
         
     }
     
@@ -104,8 +112,12 @@ public class PlayerController : MonoBehaviour
 
     void GunShoot()
     {
+        if (!canYouShootAfterRelod)
+        {
+            return;
+        }
         if (Input.GetButton("Fire2"))
-     {
+        {
          if (gun.gameObject.activeSelf)
          {
            gun.gameObject.SetActive(false);  
@@ -113,7 +125,8 @@ public class PlayerController : MonoBehaviour
          }
          if (Input.GetButtonDown("Fire1") && ammo > 0)
          {
-             ammo -= 1;
+             removeAmmoAndPlaySound();
+             shootAudioControler.Play();
              if (Physics.Raycast(camera.transform.position, camera.transform.forward, out RaycastHit hit))
              {
                  
@@ -126,9 +139,9 @@ public class PlayerController : MonoBehaviour
                  }
              }
          }
-     }
-     else
-     {
+        }
+        else
+        {
          if (!gun.gameObject.activeSelf)
          {
              gun.gameObject.SetActive(true);
@@ -137,7 +150,7 @@ public class PlayerController : MonoBehaviour
          
          if (Input.GetButtonDown("Fire1") && ammo > 0)
          {
-             ammo -= 1;
+             removeAmmoAndPlaySound();
              if (Physics.Raycast(gun.position, gun.forward, out RaycastHit hit))
              {
                  ShotOnPartForBody enemy = hit.collider.GetComponent<ShotOnPartForBody>();
@@ -149,7 +162,7 @@ public class PlayerController : MonoBehaviour
                  }
              }
          }
-     }
+        }
        
         
     }
@@ -195,9 +208,12 @@ public class PlayerController : MonoBehaviour
 
     private void relodAmmo()
     {
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetKey(KeyCode.R) && !justReload)
         {
-           ammo = maxAmmo; 
+            justReload = true;
+            canYouShootAfterRelod = false;
+            reloadAudiController.Play();
+            ammo = maxAmmo; 
         }
     }
 
@@ -205,5 +221,27 @@ public class PlayerController : MonoBehaviour
     {
         return ammo;
     }
+
+    private void removeAmmoAndPlaySound()
+    {
+        ammo -= 1;
+        justReload = false;
+       
+    }
+
+    private void countTimeAfterReload()
+    {
+        if (justReload)
+        {
+            timeAfterReload += Time.deltaTime;
+            if (timeAfterReload > 1)
+            {
+                canYouShootAfterRelod = true;
+                timeAfterReload = 0;
+            }
+            
+        }
+    }
+    
     
 }
