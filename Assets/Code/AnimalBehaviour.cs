@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Palmmedia.ReportGenerator.Core.Reporting.Builders;
+using UnityEditor.Build;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class AnimalBehaviour : MonoBehaviour
 {
@@ -36,18 +40,99 @@ public class AnimalBehaviour : MonoBehaviour
 
     private bool isShotOnBody = false;
     
+    //AI
+    public float lookRadius = 60f;
+    public float walkRadius;
+    Transform target; 
+    NavMeshAgent agent;
     
-    
+    //patrolling
+    Vector3 pointOfPatrol;
+    public Vector3 walkPoint;
+    bool walkPointSet;
+
+    public float walkPointRange;
+
     void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
+        pointOfPatrol = gameObject.transform.position;
+        walkRadius = 100f;
         SelectedAnimal();
     }
-
-   
+    
     void Update()
     {
+        // float distance = Vector3.Distance(target.position, transform.position);
+        if (playerController.transform.position.x <= lookRadius)
+        {
+            // Need to introduce some kind of Coroutines and involved with it things to keep Runaway and other functions running without interruptions 
+            float timeLeft = 6f;
+            Runaway();
+        }
+        else
+        {
+            Patrol();
+        }
     }
 
+    private void Runaway()
+    {
+        float xPlayer = playerController.transform.position.x;
+        float yPlayerRotation = playerController.transform.rotation.y;
+        
+        float directionRange = Random.Range(-60f, 60f);
+        float directionOfRunaway = yPlayerRotation + directionRange;
+
+        transform.position += transform.forward * Time.deltaTime * agent.speed;
+        
+
+
+        // Vector3 randomPointInCircle = Random.insideUnitSphere * walkRadius;
+        // randomPointInCircle += transform.position;
+        // NavMeshHit hit;
+        // if (NavMesh.SamplePosition(randomPointInCircle, out hit, walkRadius, 0))
+        // {
+        //     Vector3 finalPosition = hit.position;
+        //     walkPoint = finalPosition;
+        //     walkPointSet = true;
+        // }
+
+    }
+    
+    private void Patrol()
+    {
+        if (!walkPointSet)
+            WalkPointInCircle();
+        
+        if (walkPointSet)
+        {
+            float distanceToMid = Vector3.Distance(pointOfPatrol, walkPoint);
+
+            agent.SetDestination(walkPoint);
+        }
+
+        Vector3 distanceToDest = transform.position - walkPoint;
+        float magnitude = distanceToDest.magnitude;
+        if (magnitude < 2.5f)
+        {
+            walkPointSet = false;
+        }
+    }
+    
+    private void WalkPointInCircle()
+    {
+        Vector3 randomPointInCircle = Random.insideUnitSphere * walkRadius;
+        randomPointInCircle += transform.position;
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomPointInCircle, out hit, walkRadius, 0))
+        {
+            Vector3 finalPosition = hit.position;
+            walkPoint = finalPosition;
+            walkPointSet = true;
+        }
+    }
+    
     private void SelectedAnimal()
     {
         
