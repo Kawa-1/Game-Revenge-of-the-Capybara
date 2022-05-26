@@ -595,7 +595,7 @@ GameObject:
   - component: {fileID: 3288753700283728181}
   m_Layer: 0
   m_Name: DeadRoe
-  m_TagString: Untagged
+  m_TagString: Dead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -636,6 +636,10 @@ MonoBehaviour:
   deadDeer: {fileID: 0}
   deadRoe: {fileID: 0}
   deadBoar: {fileID: 0}
+  lookRadius: 60
+  walkRadius: 0
+  walkPoint: {x: 0, y: 0, z: 0}
+  walkPointRange: 0
 --- !u!54 &3288753700283728181
 Rigidbody:
   m_ObjectHideFlags: 0

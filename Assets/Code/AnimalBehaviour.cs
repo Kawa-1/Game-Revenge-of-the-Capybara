@@ -64,7 +64,7 @@ public class AnimalBehaviour : MonoBehaviour
     void Update()
     {
         // float distance = Vector3.Distance(target.position, transform.position);
-        if (playerController.transform.position.x <= lookRadius)
+        if (playerController.transform.position.x <= lookRadius && !gameObject.CompareTag("Dead"))
         {
             // Need to introduce some kind of Coroutines and involved with it things to keep Runaway and other functions running without interruptions 
             float timeLeft = 6f;
