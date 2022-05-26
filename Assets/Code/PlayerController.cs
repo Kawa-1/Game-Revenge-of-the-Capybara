@@ -1,4 +1,7 @@
 
+using System.Collections;
+using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,11 +16,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PistolSeting pistolSeting;
     [SerializeField] private AudioSource shootAudioControler;
     [SerializeField] private AudioSource reloadAudiController;
-
+    [SerializeField] private ParticleSystem muzzleParticleSystem;
+    [SerializeField] private ParticleSystem aimingMuzzlePArticalSystem;
+    [SerializeField] private Transform muzzleTransform;
+    [SerializeField] private Transform muzzleAimingTransform;
+    
+    
     private float damageReductionFactor;
     private float maxDistanceWhereMaxDamage;
     private float damageGun;
     private RawImage aimingGun;
+    
+
+    List<ParticleSystem> muzzleList = new List<ParticleSystem>();
+    
+    
 
 
 
@@ -112,10 +125,7 @@ public class PlayerController : MonoBehaviour
 
     void GunShoot()
     {
-        if (!canYouShootAfterRelod)
-        {
-            return;
-        }
+        
         if (Input.GetButton("Fire2"))
         {
          if (gun.gameObject.activeSelf)
@@ -123,10 +133,18 @@ public class PlayerController : MonoBehaviour
            gun.gameObject.SetActive(false);  
            playerInterface.showAimingGun();
          }
+         if (!canYouShootAfterRelod)
+         {
+             return;
+         }
          if (Input.GetButtonDown("Fire1") && ammo > 0)
          {
              removeAmmoAndPlaySound();
-             shootAudioControler.Play();
+             //aimingMuzzlePArticalSystem.Play();
+             ParticleSystem newAimingMuzzle = Instantiate(aimingMuzzlePArticalSystem , muzzleAimingTransform.position, muzzleAimingTransform.rotation);
+             newAimingMuzzle.Play();
+             muzzleList.Add(newAimingMuzzle);
+             Invoke("deleteMuzzle" , 2);
              if (Physics.Raycast(camera.transform.position, camera.transform.forward, out RaycastHit hit))
              {
                  
@@ -147,10 +165,20 @@ public class PlayerController : MonoBehaviour
              gun.gameObject.SetActive(true);
              playerInterface.hideAimingGun();
          }
+         if (!canYouShootAfterRelod)
+         {
+             return;
+         }
          
          if (Input.GetButtonDown("Fire1") && ammo > 0)
          {
              removeAmmoAndPlaySound();
+            // muzzleParticleSystem.Play();
+             ParticleSystem newMuzzle = Instantiate(aimingMuzzlePArticalSystem , muzzleTransform.position, muzzleTransform.rotation);
+             newMuzzle.Play(); 
+             muzzleList.Add(newMuzzle);
+             Invoke("deleteMuzzle" , 2);
+            
              if (Physics.Raycast(gun.position, gun.forward, out RaycastHit hit))
              {
                  ShotOnPartForBody enemy = hit.collider.GetComponent<ShotOnPartForBody>();
@@ -166,6 +194,19 @@ public class PlayerController : MonoBehaviour
        
         
     }
+    void deleteMuzzle()
+    {
+        if (muzzleList.Count != 0)
+        {
+            Destroy(muzzleList[0]);
+            muzzleList.RemoveAt(0);
+        }
+        
+    }
+    
+
+   
+   
 
 
     float getGiveDamage(float distance)
@@ -224,6 +265,7 @@ public class PlayerController : MonoBehaviour
 
     private void removeAmmoAndPlaySound()
     {
+        shootAudioControler.Play();
         ammo -= 1;
         justReload = false;
        
