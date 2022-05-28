@@ -1,9 +1,8 @@
-
-using System.Collections;
 using System.Collections.Generic;
-using TreeEditor;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,6 +19,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem aimingMuzzlePArticalSystem;
     [SerializeField] private Transform muzzleTransform;
     [SerializeField] private Transform muzzleAimingTransform;
+
+   // [SerializeField] private Transform posUsunac;
+   // [SerializeField] private NavMeshAgent navUsunac;
     
     
     private float damageReductionFactor;
@@ -63,6 +65,8 @@ public class PlayerController : MonoBehaviour
     int howManyTimesPlayerCanJump;
     void Update()
     {
+        //navUsunac.SetDestination(posUsunac.position);
+        
         Walking();
         HorizontalRotation();
         VerticalRotation();

@@ -1,13 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AnimalBehaviour : MonoBehaviour
 {
 
     [SerializeField] private PlayerController playerController;
     [SerializeField] private float headShootMultiplier = 2;
-    
+    [SerializeField] private Animator deadAnimator;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private GameObject body;
+    [SerializeField] private Material redDeadMaterial;
+
+    [SerializeField] private NavMeshAgent navMeshAgent;
+
     public GameObject deadSheep;
     public GameObject deadDeer;
     public GameObject deadRoe;
@@ -35,6 +42,8 @@ public class AnimalBehaviour : MonoBehaviour
     private float live;
 
     private bool isShotOnBody = false;
+
+    private bool isLive = true;
     
     
     
@@ -46,6 +55,8 @@ public class AnimalBehaviour : MonoBehaviour
    
     void Update()
     {
+        navMeshAgent.SetDestination(new Vector3(0,0,0));
+
     }
 
     private void SelectedAnimal()
@@ -79,7 +90,10 @@ public class AnimalBehaviour : MonoBehaviour
 
     public void ShotOnAnimal(string shotPartsOfAnimal, float damage)
     {
-        
+        if (!isLive)
+        {
+            return;
+        }
        
         if (shotPartsOfAnimal.Equals("Head"))
         {
@@ -149,12 +163,37 @@ public class AnimalBehaviour : MonoBehaviour
             recivedPoints = 0;
         }
         playerController.addPoints(recivedPoints);
-        creatDeadAnimal();
-        
-    
+
+     
+        isLive = false;
         addAmountKillAnimal();
-        Destroy(gameObject);
+       
+        StartCoroutine(deadAnimationRotation());
+        gameObject.GetComponent<NavMeshAgent>().enabled = false;
+        //Destroy(gameObject);
+        //creatDeadAnimal();
+    }
+
+    private IEnumerator  deadAnimationRotation()
+    {
+        float duration = 1;
+        Quaternion startRotation = transform.rotation;
+        Quaternion endRotation = startRotation * Quaternion.Euler(Vector3.forward * 90);
+        bool changeColorOfBody = true;
+        for(float t = 0f; t < duration; t += Time.deltaTime)
+        {
+
+            if (t > duration / 2 && changeColorOfBody)
+            {
+                body.GetComponent<Renderer>().material = redDeadMaterial;
+                changeColorOfBody = false;
+            }
+            gameObject.transform.rotation = Quaternion.Lerp( startRotation, endRotation, t / duration ) ;
+            yield return null;
+        }
         
+        gameObject.transform.rotation = endRotation;
+       
     }
 
     private void addAmountKillAnimal()

@@ -184,6 +184,21 @@ public class SceneInterface : MonoBehaviour
         {
             return;
         }
+
+        bool repalyPlayer = false;
+        foreach (var player in bestPlayers)
+        {
+            if (playerNameInputField.text.Equals(player))
+            {
+                repalyPlayer = true;
+                return;
+            }
+        }
+
+        if (repalyPlayer)
+        {
+            return;
+        }
         int bestTimeIndex = -1;
         int index = 0;
         foreach (var time in bestTimeList)

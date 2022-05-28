@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.AI;
+
+
 
 public class WorldGenerator : MonoBehaviour
 {
@@ -36,7 +39,11 @@ public class WorldGenerator : MonoBehaviour
     
     [SerializeField] private float maxAmmountOfAnimal;
     [SerializeField] private float maxAmmountOfPlants;
-    
+
+    [SerializeField] private GameObject allPlants;
+    [SerializeField] private GameObject allAnimal;
+
+    [SerializeField] private NavMeshSurface surface;
   
 
     private float xLenghtTerrain;
@@ -59,8 +66,16 @@ public class WorldGenerator : MonoBehaviour
         
         GeneratePlantsAndRockOnHoleTerrain();
         GenerateAnimalOnHoleTerrain();
+        buildNavMesh();
+    }
+
+    private void buildNavMesh()
+    {
+      
+            surface.BuildNavMesh();
         
     }
+
 
     private void startInformationAboutTerrain()
     {
@@ -128,51 +143,51 @@ public class WorldGenerator : MonoBehaviour
                         switch (selectedPlants)
                         {
                             case 1:
-                                GameObject newTree1 = Instantiate(tree1, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newTree1 = Instantiate(tree1, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newTree1, newPlantsPosition);
                                 break;
                             case 2:
-                                GameObject newTree2 = Instantiate(tree2, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newTree2 = Instantiate(tree2, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newTree2, newPlantsPosition);
                                 break;
                             case 3:
-                                GameObject newTree3 = Instantiate(tree3, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newTree3 = Instantiate(tree3, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newTree3, newPlantsPosition);
                                 break;
                             case 4:
-                                GameObject newTree4 = Instantiate(tree4, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newTree4 = Instantiate(tree4, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newTree4, newPlantsPosition);
                                 break;
                             case 5:
-                                GameObject newTree5 = Instantiate(tree5, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newTree5 = Instantiate(tree5, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newTree5, newPlantsPosition);
                                 break;
                             case 6:
-                                GameObject newTree6 = Instantiate(tree6, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newTree6 = Instantiate(tree6, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newTree6, newPlantsPosition);
                                 break;
                             case 7:
-                                GameObject newTree7 = Instantiate(tree7, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newTree7 = Instantiate(tree7, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newTree7, newPlantsPosition);
                                 break;
                             case 8:
-                                GameObject newTree8 = Instantiate(tree8, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newTree8 = Instantiate(tree8, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newTree8, newPlantsPosition);
                                 break;
                             case 9:
-                                GameObject newbush1 = Instantiate(bush1, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newbush1 = Instantiate(bush1, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newbush1, newPlantsPosition);
                                 break;
                             case 10:
-                                GameObject newbush2 = Instantiate(bush2, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newbush2 = Instantiate(bush2, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newbush2, newPlantsPosition);
                                 break;
                             case 11:
-                                GameObject newrock1 = Instantiate(rock1, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newrock1 = Instantiate(rock1, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newrock1, newPlantsPosition);
                                 break;
                             case 12:
-                                GameObject newrock2 = Instantiate(rock2, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+                                GameObject newrock2 = Instantiate(rock2, newPlantsPosition, Quaternion.Euler(0,Random.Range(0,360),0),allPlants.transform);
                                 checkPositionNewObject(newrock2, newPlantsPosition);
                                 break;
                            
@@ -369,25 +384,25 @@ public class WorldGenerator : MonoBehaviour
 
     void GenerateSheep(Vector3 newPosition)
     {
-        AnimalBehaviour newSheep = Instantiate(enemySheep, newPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+        AnimalBehaviour newSheep = Instantiate(enemySheep, newPosition, Quaternion.Euler(0,Random.Range(0,360),0),allAnimal.transform);
         newSheep.setPlayerController(playerController);
         newSheep.deadSheep = deadSheep;
     }
     void GenerateDeer(Vector3 newPosition)
     {
-        AnimalBehaviour newDeer = Instantiate(enemyDeer, newPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+        AnimalBehaviour newDeer = Instantiate(enemyDeer, newPosition, Quaternion.Euler(0,Random.Range(0,360),0),allAnimal.transform);
         newDeer.setPlayerController(playerController);
         newDeer.deadDeer = deadDeer;
     }
     void GenerateRoe(Vector3 newPosition)
     {
-        AnimalBehaviour newRoe = Instantiate(enemyRoe, newPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+        AnimalBehaviour newRoe = Instantiate(enemyRoe, newPosition, Quaternion.Euler(0,Random.Range(0,360),0),allAnimal.transform);
         newRoe.setPlayerController(playerController);
         newRoe.deadRoe = deadRoe;
     }
     void GenerateBoar(Vector3 newPosition)
     {
-        AnimalBehaviour newBoar = Instantiate(enemyBoar, newPosition, Quaternion.Euler(0,Random.Range(0,360),0));
+        AnimalBehaviour newBoar = Instantiate(enemyBoar, newPosition, Quaternion.Euler(0,Random.Range(0,360),0),allAnimal.transform);
         newBoar.setPlayerController(playerController);
         newBoar.deadBoar = deadBoar;
     }

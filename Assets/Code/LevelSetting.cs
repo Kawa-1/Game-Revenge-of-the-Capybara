@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class LevelSetting : MonoBehaviour
 {
+    private float ammountAnimalToKill = 25;
+
     static public bool isPointRaceMode;
     static public bool isBigHuntMode;
     static public bool youLose;
@@ -20,9 +22,8 @@ public class LevelSetting : MonoBehaviour
     static public float boarKill;
 
     static public bool isGenerate;
-    private float ammountAnimalToKill = 25;
     private void Update()
-    {
+    {   
         if (!isGenerate)
         {
             GenerateAnimalToKillInBigHuntMode();
@@ -33,7 +34,7 @@ public class LevelSetting : MonoBehaviour
 
     void GenerateAnimalToKillInBigHuntMode()
     {
-
+        
         deerToKillAmount = 0;
         roeToKillAmount = 0;
         sheepToKillAmount = 0;
