@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class AnimalBehaviour : MonoBehaviour
 {
@@ -14,6 +17,7 @@ public class AnimalBehaviour : MonoBehaviour
     [SerializeField] private Material redDeadMaterial;
 
     [SerializeField] private NavMeshAgent navMeshAgent;
+    private Transform playerTransform;
 
     public GameObject deadSheep;
     public GameObject deadDeer;
@@ -46,19 +50,164 @@ public class AnimalBehaviour : MonoBehaviour
     private bool isLive = true;
     
     
+    private Vector3 spawnPoint;
+    private bool walkNowToPointSet = false;
+    private float patrolRadius = 50f;
+    private Vector3 destinationToPatrolVector3;
+    private float yRayCastPosition = 200f;
+    private Vector3 destinationPoint;
+    private float maxRange = 100f;
+    private bool escapeBeforeThePlayer = true;
+    private Terrain terrain;
+    private float xTerrein;
+    private float zTerrein;
     
     void Start()
-    {
+    { 
+        zTerrein = terrain.terrainData.size.z;
+        xTerrein = terrain.terrainData.size.x;
+        spawnPoint = gameObject.transform.position;
         SelectedAnimal();
+        //Debug.Log("pozycja " + playerTransform.position + "kurwa "+ playerController.transform.position);newBoar
+       
+        
     }
 
    
     void Update()
     {
-        navMeshAgent.SetDestination(new Vector3(0,0,0));
+        //Debug.Log("kurwica  = " +  spawnPoint);
+        //navMeshAgent.SetDestination(new Vector3(0,0,0));
+        if (isLive)
+        {
+            patrol();
+            runningAwayFromThePalyer(); 
+        }
+        
+        Debug.Log("kurwa");
+        Debug.Log(playerTransform.position);
+
 
     }
 
+    private void patrol()
+    {   
+        if (walkNowToPointSet)
+        {
+            navMeshAgent.SetDestination(destinationPoint);
+            float distanceToDestination = Vector3.Distance(gameObject.transform.position, destinationPoint);
+            if (distanceToDestination < 2f)
+            {
+                walkNowToPointSet = false;
+            }
+        }
+        else
+        {
+            float x;
+            float z;
+            RaycastHit hit;
+            while (true)
+            {
+                x = Random.Range(spawnPoint.x - patrolRadius,spawnPoint.x + patrolRadius);
+                z = Random.Range(spawnPoint.z - patrolRadius,spawnPoint.z + patrolRadius);
+                Physics.Raycast(new Vector3(x, yRayCastPosition, z), Vector3.down, out hit);
+                if (hit.transform == null || hit.transform.gameObject.layer == 17 || hit.transform.gameObject.layer == 6)
+                    {
+
+                        continue;
+                    }
+                    destinationPoint = new Vector3(x, hit.point.y, z);
+                    //Debug.Log("dest = " + destinationPoint + transform.gameObject.tag);
+                    break;
+               
+            }
+            walkNowToPointSet = true;
+        }
+    }
+
+    private void runningAwayFromThePalyer()
+    {
+        float distanceAnimalToPlayer = Vector3.Distance(gameObject.transform.position, playerTransform.position);
+        if (distanceAnimalToPlayer > maxRange / 2)
+        {
+            escapeBeforeThePlayer = true;
+        }
+        if (escapeBeforeThePlayer)
+        {
+
+
+
+            if (distanceAnimalToPlayer < maxRange)
+            {
+                Debug.Log("1111111111111111111111111111111111111");
+
+                RaycastHit hit;
+
+                Debug.DrawLine(transform.position, playerTransform.position, Color.red, Mathf.Infinity);
+                //Debug.Log(playerController.transform.position - transform.position);
+
+                if (Physics.Raycast(transform.position, (playerTransform.position - transform.position).normalized,
+                        out hit))
+                {
+                    Debug.Log("222222222222222222222222222222");
+                    Debug.Log(gameObject.tag);
+                    if (hit.transform.tag.Equals("Player"))
+                    { 
+                        /*float x = Random.Range(playerTransform.position.x - maxRange, playerTransform.position.x + maxRange);
+                        float z;
+                        float zSign = Random.Range(0,2);
+                        if (zSign == 0)
+                        {
+                            z = playerTransform.position.z + maxRange;
+                        }
+
+                        if (zSign == 1)
+                        {
+                            z = playerTransform.position.z - maxRange;
+
+                        }*/
+                        
+
+                        float x;
+                        float z;
+
+                        x = transform.position.x + transform.position.x - playerTransform.position.x;
+                        z = transform.position.z + transform.position.z - playerTransform.position.z;
+                        if (x <= 0)
+                        {
+                            x = 1;
+                        }
+                        if (z <= 0)
+                        {
+                            z = 1;
+                        }
+                        if (x >= xTerrein)
+                        {
+                            x = xTerrein - 1;
+                        }
+                        if (z >= zTerrein)
+                        {
+                            z = zTerrein - 1;
+                        }
+                        Physics.Raycast(new Vector3(x, yRayCastPosition, z), Vector3.down, out hit);
+                        spawnPoint = new Vector3(x, hit.point.y, z);
+
+                        walkNowToPointSet = false;
+                        escapeBeforeThePlayer = false;
+                    }
+                }
+                //Debug.Log(hit.transform.position);
+                //Debug.Log(hit.transform.gameObject.tag);
+            }
+        }
+
+    }
+    private Vector3 RandomPointOnCircleEdge(float radius)
+    {
+        var vector2 = Random.insideUnitCircle.normalized * radius;
+        return new Vector3(vector2.x, 0, vector2.y);
+    }
+    
     private void SelectedAnimal()
     {
         
@@ -246,5 +395,14 @@ public class AnimalBehaviour : MonoBehaviour
         
         
 
+    }
+    
+    public void setTerrain(Terrain terrain)
+    {
+        this.terrain = terrain;
+    }
+    public void setPlayerTransform(Transform transform)
+    {
+        this.playerTransform = transform;
     }
 }

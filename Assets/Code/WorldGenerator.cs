@@ -44,6 +44,7 @@ public class WorldGenerator : MonoBehaviour
     [SerializeField] private GameObject allAnimal;
 
     [SerializeField] private NavMeshSurface surface;
+    [SerializeField] private Transform playerTranform;
   
 
     private float xLenghtTerrain;
@@ -56,14 +57,13 @@ public class WorldGenerator : MonoBehaviour
 
     private float ammounOfAnimal = 0;
     private float ammountOfPlants = 0;
-    
+
     
         
     void Start()
     {
+        
         startInformationAboutTerrain();
-        
-        
         GeneratePlantsAndRockOnHoleTerrain();
         GenerateAnimalOnHoleTerrain();
         buildNavMesh();
@@ -109,7 +109,7 @@ public class WorldGenerator : MonoBehaviour
                         float z = Random.Range(iz - zFragmentLength, iz);
                         
                         Physics.Raycast(new Vector3(x, yRayCastPosition, z), Vector3.down, out RaycastHit hit);
-                        if (hit.transform.gameObject.layer.Equals("plants") && hit.transform.gameObject.layer.Equals("Player"))
+                        if (hit.transform.gameObject.layer == 17 || hit.transform.gameObject.layer == 6) 
                         {
                             repetitionCounterPlants += 1;
                             if (repetitionCounterPlants > 50)
@@ -288,7 +288,7 @@ public class WorldGenerator : MonoBehaviour
                             continue;
                         }
                         Physics.Raycast(new Vector3(x, yRayCastPosition, z), Vector3.down, out RaycastHit hit);
-                        if (hit.transform.gameObject.layer.Equals("plants"))
+                        if (hit.transform.gameObject.layer == 17)
                         {
                             repetitionCounterPlants += 1;
                             if (repetitionCounterPlants > 50)
@@ -347,7 +347,7 @@ public class WorldGenerator : MonoBehaviour
             
             Physics.Raycast(new Vector3(x, yRayCastPosition, z), Vector3.down, out RaycastHit hit);
            
-            if (hit.transform.gameObject.layer.Equals("plants"))
+            if (hit.transform.gameObject.layer == 17)
             {
                 continue;
             }
@@ -387,25 +387,38 @@ public class WorldGenerator : MonoBehaviour
         AnimalBehaviour newSheep = Instantiate(enemySheep, newPosition, Quaternion.Euler(0,Random.Range(0,360),0),allAnimal.transform);
         newSheep.setPlayerController(playerController);
         newSheep.deadSheep = deadSheep;
+        newSheep.setTerrain(terrain);
+        newSheep.setPlayerTransform(playerTranform);
     }
     void GenerateDeer(Vector3 newPosition)
     {
         AnimalBehaviour newDeer = Instantiate(enemyDeer, newPosition, Quaternion.Euler(0,Random.Range(0,360),0),allAnimal.transform);
         newDeer.setPlayerController(playerController);
         newDeer.deadDeer = deadDeer;
+        newDeer.setTerrain(terrain);
+        newDeer.setPlayerTransform(playerTranform);
+
     }
     void GenerateRoe(Vector3 newPosition)
     {
         AnimalBehaviour newRoe = Instantiate(enemyRoe, newPosition, Quaternion.Euler(0,Random.Range(0,360),0),allAnimal.transform);
         newRoe.setPlayerController(playerController);
         newRoe.deadRoe = deadRoe;
+        newRoe.setTerrain(terrain);
+        newRoe.setPlayerTransform(playerTranform);
+
     }
     void GenerateBoar(Vector3 newPosition)
     {
         AnimalBehaviour newBoar = Instantiate(enemyBoar, newPosition, Quaternion.Euler(0,Random.Range(0,360),0),allAnimal.transform);
         newBoar.setPlayerController(playerController);
         newBoar.deadBoar = deadBoar;
+        newBoar.setTerrain(terrain);
+        newBoar.setPlayerTransform(playerTranform);
+
     }
+
+
     
     
 }

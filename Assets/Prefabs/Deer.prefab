@@ -1277,10 +1277,12 @@ MonoBehaviour:
   body: {fileID: 7615193849829381956}
   redDeadMaterial: {fileID: 2100000, guid: 2db39d5a4838202498a618e6469c0897, type: 2}
   navMeshAgent: {fileID: 6484445979218416395}
+  playerTransform: {fileID: 760168272055008967, guid: 53c9eb3a3fdd58d42803c916ab062672, type: 3}
   deadSheep: {fileID: 0}
   deadDeer: {fileID: 6890569511926093652, guid: 8d04838ff0158924c8a72981a9cbab74, type: 3}
   deadRoe: {fileID: 0}
   deadBoar: {fileID: 0}
+  terrain: {fileID: 0}
 --- !u!54 &4106665974040185882
 Rigidbody:
   m_ObjectHideFlags: 0
