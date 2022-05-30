@@ -17,7 +17,7 @@ public class AnimalBehaviour : MonoBehaviour
     [SerializeField] private Material redDeadMaterial;
 
     [SerializeField] private NavMeshAgent navMeshAgent;
-    private Transform playerTransform;
+    public Transform playerTransform;
 
     public GameObject deadSheep;
     public GameObject deadDeer;
@@ -58,7 +58,7 @@ public class AnimalBehaviour : MonoBehaviour
     private Vector3 destinationPoint;
     private float maxRange = 100f;
     private bool escapeBeforeThePlayer = true;
-    private Terrain terrain;
+    public Terrain terrain;
     private float xTerrein;
     private float zTerrein;
     
@@ -68,7 +68,7 @@ public class AnimalBehaviour : MonoBehaviour
         xTerrein = terrain.terrainData.size.x;
         spawnPoint = gameObject.transform.position;
         SelectedAnimal();
-        //Debug.Log("pozycja " + playerTransform.position + "kurwa "+ playerController.transform.position);newBoar
+        //Debug.Log("pozycja " + playerTransform.position + "kurwa ");
        
         
     }
@@ -84,8 +84,8 @@ public class AnimalBehaviour : MonoBehaviour
             runningAwayFromThePalyer(); 
         }
         
-        Debug.Log("kurwa");
-        Debug.Log(playerTransform.position);
+     //   Debug.Log("kurwa");
+       // Debug.Log(playerTransform.position);
 
 
     }
@@ -128,7 +128,7 @@ public class AnimalBehaviour : MonoBehaviour
     private void runningAwayFromThePalyer()
     {
         float distanceAnimalToPlayer = Vector3.Distance(gameObject.transform.position, playerTransform.position);
-        if (distanceAnimalToPlayer > maxRange / 2)
+        if (distanceAnimalToPlayer > maxRange )
         {
             escapeBeforeThePlayer = true;
         }
@@ -150,7 +150,7 @@ public class AnimalBehaviour : MonoBehaviour
                         out hit))
                 {
                     Debug.Log("222222222222222222222222222222");
-                    Debug.Log(gameObject.tag);
+                   // Debug.Log(gameObject.tag);
                     if (hit.transform.tag.Equals("Player"))
                     { 
                         /*float x = Random.Range(playerTransform.position.x - maxRange, playerTransform.position.x + maxRange);
@@ -189,9 +189,30 @@ public class AnimalBehaviour : MonoBehaviour
                         {
                             z = zTerrein - 1;
                         }
-                        Physics.Raycast(new Vector3(x, yRayCastPosition, z), Vector3.down, out hit);
-                        spawnPoint = new Vector3(x, hit.point.y, z);
-
+                        
+                        Vector3 tmpSpawnPoint = new Vector3(x,0, z);
+                        Debug.Log("first spawn" + tmpSpawnPoint);
+                        while (true)
+                        {
+                            Physics.Raycast(new Vector3(tmpSpawnPoint.x, yRayCastPosition, tmpSpawnPoint.z), Vector3.down, out  RaycastHit hit1);
+                            if (hit1.transform.gameObject.layer == 17 || hit1.transform.gameObject.layer == 6)
+                            {
+                                Debug.Log("x = " + z + " z + " + z);
+                                float x1 = Random.Range(x - 5, x+5);
+                                float z1 = Random.Range(z-5, z+5);
+                                tmpSpawnPoint = new Vector3(x1, 0, z1);
+                                
+                                continue;
+                            }
+                            else
+                            {
+                                spawnPoint = new Vector3(tmpSpawnPoint.x, hit1.point.y, tmpSpawnPoint.z);
+                                break;
+                            }   
+                    
+                        }
+                        Debug.Log("secend spawn" + spawnPoint);
+                        
                         walkNowToPointSet = false;
                         escapeBeforeThePlayer = false;
                     }
@@ -319,6 +340,7 @@ public class AnimalBehaviour : MonoBehaviour
        
         StartCoroutine(deadAnimationRotation());
         gameObject.GetComponent<NavMeshAgent>().enabled = false;
+        
         //Destroy(gameObject);
         //creatDeadAnimal();
     }
@@ -342,7 +364,7 @@ public class AnimalBehaviour : MonoBehaviour
         }
         
         gameObject.transform.rotation = endRotation;
-       
+        rb.isKinematic = true;
     }
 
     private void addAmountKillAnimal()
