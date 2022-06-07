@@ -10,7 +10,7 @@ public class AnimalBehaviour : MonoBehaviour
 {
 
     [SerializeField] private PlayerController playerController;
-    [SerializeField] private float headShootMultiplier = 4;
+    [SerializeField] private float headShootMultiplier = 10000;
     [SerializeField] private Animator deadAnimator;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private GameObject body;
