@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem aimingMuzzlePArticalSystem;
     [SerializeField] private Transform muzzleTransform;
     [SerializeField] private Transform muzzleAimingTransform;
+    [SerializeField] private float defultZoomInCamera;
+    [SerializeField] private float aimingZoomInCamera;
 
    // [SerializeField] private Transform posUsunac;
    // [SerializeField] private NavMeshAgent navUsunac;
@@ -117,7 +119,7 @@ public class PlayerController : MonoBehaviour
             Input.GetAxis("Vertical")
         );
         var velocity = transform.rotation * userKeyboardInput * movementSpeed;
-        if (Input.GetKey(KeyCode.LeftShift)) velocity = velocity * 2;
+        if (Input.GetKey(KeyCode.LeftShift)) velocity = velocity * 2.5f;
         velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = velocity;
     }
@@ -129,9 +131,10 @@ public class PlayerController : MonoBehaviour
 
     void GunShoot()
     {
-        
+        camera.fieldOfView = defultZoomInCamera;
         if (Input.GetButton("Fire2"))
         {
+            camera.fieldOfView = aimingZoomInCamera;
          if (gun.gameObject.activeSelf)
          {
            gun.gameObject.SetActive(false);  

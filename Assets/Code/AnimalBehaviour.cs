@@ -10,7 +10,7 @@ public class AnimalBehaviour : MonoBehaviour
 {
 
     [SerializeField] private PlayerController playerController;
-    [SerializeField] private float headShootMultiplier = 2;
+    [SerializeField] private float headShootMultiplier = 4;
     [SerializeField] private Animator deadAnimator;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private GameObject body;
@@ -68,7 +68,7 @@ public class AnimalBehaviour : MonoBehaviour
         xTerrein = terrain.terrainData.size.x;
         spawnPoint = gameObject.transform.position;
         SelectedAnimal();
-        //Debug.Log("pozycja " + playerTransform.position + "kurwa ");
+        
        
         
     }
@@ -76,62 +76,126 @@ public class AnimalBehaviour : MonoBehaviour
    
     void Update()
     {
-        //Debug.Log("kurwica  = " +  spawnPoint);
-        //navMeshAgent.SetDestination(new Vector3(0,0,0));
         if (isLive)
         {
             patrol();
             runningAwayFromThePalyer(); 
         }
-        
-     //   Debug.Log("kurwa");
-       // Debug.Log(playerTransform.position);
 
 
+        StartCoroutine(xd());
+    
+
+
+    }
+
+    private bool debug = true;
+    IEnumerator xd()
+    {
+        if (navMeshAgent.enabled && debug)
+        {
+            float lastDistanceToZero = distanceToZero;
+
+            yield return new WaitForSeconds(5f); 
+
+            distanceToZero = Vector3.Distance(gameObject.transform.position, new Vector3(0, 0, 0));
+
+            if (Math.Abs(lastDistanceToZero - distanceToZero) < 0.3)
+            {
+                escapeBeforeThePlayer = true;
+                debug = false;
+                
+                StartCoroutine(xd2());
+            }
+        }
+    }
+
+    IEnumerator xd2()
+    {
+        yield return new WaitForSeconds(10f);
+        debug = true;
     }
 
     private void patrol()
-    {   
-        if (walkNowToPointSet)
+    {
+        if (navMeshAgent.enabled)
         {
-            navMeshAgent.SetDestination(destinationPoint);
-            float distanceToDestination = Vector3.Distance(gameObject.transform.position, destinationPoint);
-            if (distanceToDestination < 2f)
+                
+            if (walkNowToPointSet)
             {
-                walkNowToPointSet = false;
-            }
-        }
-        else
-        {
-            float x;
-            float z;
-            RaycastHit hit;
-            while (true)
-            {
-                x = Random.Range(spawnPoint.x - patrolRadius,spawnPoint.x + patrolRadius);
-                z = Random.Range(spawnPoint.z - patrolRadius,spawnPoint.z + patrolRadius);
-                Physics.Raycast(new Vector3(x, yRayCastPosition, z), Vector3.down, out hit);
-                if (hit.transform == null || hit.transform.gameObject.layer == 17 || hit.transform.gameObject.layer == 6)
-                    {
+                if (navMeshAgent.enabled)
+                {
+                    navMeshAgent.SetDestination(destinationPoint);
+                }
 
-                        continue;
-                    }
-                    destinationPoint = new Vector3(x, hit.point.y, z);
-                    //Debug.Log("dest = " + destinationPoint + transform.gameObject.tag);
-                    break;
-               
+                float distanceToDestination = Vector3.Distance(gameObject.transform.position, destinationPoint);
+                if (distanceToDestination < 2f)
+                {
+                    walkNowToPointSet = false;
+                }
             }
-            walkNowToPointSet = true;
+            else
+            {
+                float x;
+                float z;
+                RaycastHit hit;
+                while (true)
+                {
+                    x = Random.Range(spawnPoint.x - patrolRadius,spawnPoint.x + patrolRadius);
+                    z = Random.Range(spawnPoint.z - patrolRadius,spawnPoint.z + patrolRadius);
+                    Physics.Raycast(new Vector3(x, yRayCastPosition, z), Vector3.down, out hit);
+                    if (hit.transform == null || hit.transform.gameObject.layer == 17 || hit.transform.gameObject.layer == 6)
+                        {
+
+                            continue;
+                        }
+                        destinationPoint = new Vector3(x, hit.point.y, z);
+                        break;
+                }
+                walkNowToPointSet = true;
+            }
         }
+
     }
 
+    private bool animalIsToFarToWalk = true;
+    private bool canChangeNaveMesh = true;
+    private float distanceToZero;
     private void runningAwayFromThePalyer()
     {
         float distanceAnimalToPlayer = Vector3.Distance(gameObject.transform.position, playerTransform.position);
+        
+        /*if (distanceAnimalToPlayer > 200 )
+        {
+            navMeshAgent.enabled = false;
+            animalIsToFarToWalk = true;
+            canChangeNaveMesh = true;
+            return;
+        }
+        else
+        {
+            animalIsToFarToWalk = false;
+        }
+        
+        if (distanceAnimalToPlayer < 200 && !animalIsToFarToWalk )
+        {
+            if (canChangeNaveMesh)
+            {
+               navMeshAgent.enabled = true;
+               canChangeNaveMesh = false;
+            }
+            
+        }*/
+        
+        
+        
         if (distanceAnimalToPlayer > maxRange )
         {
             escapeBeforeThePlayer = true;
         }
+        
+        
+        
         if (escapeBeforeThePlayer)
         {
 
@@ -139,33 +203,13 @@ public class AnimalBehaviour : MonoBehaviour
 
             if (distanceAnimalToPlayer < maxRange)
             {
-                Debug.Log("1111111111111111111111111111111111111");
-
                 RaycastHit hit;
-
-                Debug.DrawLine(transform.position, playerTransform.position, Color.red, Mathf.Infinity);
-                //Debug.Log(playerController.transform.position - transform.position);
-
                 if (Physics.Raycast(transform.position, (playerTransform.position - transform.position).normalized,
                         out hit))
                 {
-                    Debug.Log("222222222222222222222222222222");
-                   // Debug.Log(gameObject.tag);
                     if (hit.transform.tag.Equals("Player"))
                     { 
-                        /*float x = Random.Range(playerTransform.position.x - maxRange, playerTransform.position.x + maxRange);
-                        float z;
-                        float zSign = Random.Range(0,2);
-                        if (zSign == 0)
-                        {
-                            z = playerTransform.position.z + maxRange;
-                        }
-
-                        if (zSign == 1)
-                        {
-                            z = playerTransform.position.z - maxRange;
-
-                        }*/
+                      
                         
 
                         float x;
@@ -191,13 +235,12 @@ public class AnimalBehaviour : MonoBehaviour
                         }
                         
                         Vector3 tmpSpawnPoint = new Vector3(x,0, z);
-                        Debug.Log("first spawn" + tmpSpawnPoint);
+                     
                         while (true)
                         {
                             Physics.Raycast(new Vector3(tmpSpawnPoint.x, yRayCastPosition, tmpSpawnPoint.z), Vector3.down, out  RaycastHit hit1);
                             if (hit1.transform.gameObject.layer == 17 || hit1.transform.gameObject.layer == 6)
                             {
-                                Debug.Log("x = " + z + " z + " + z);
                                 float x1 = Random.Range(x - 5, x+5);
                                 float z1 = Random.Range(z-5, z+5);
                                 tmpSpawnPoint = new Vector3(x1, 0, z1);
@@ -211,14 +254,11 @@ public class AnimalBehaviour : MonoBehaviour
                             }   
                     
                         }
-                        Debug.Log("secend spawn" + spawnPoint);
-                        
                         walkNowToPointSet = false;
                         escapeBeforeThePlayer = false;
                     }
                 }
-                //Debug.Log(hit.transform.position);
-                //Debug.Log(hit.transform.gameObject.tag);
+                
             }
         }
 
@@ -277,6 +317,7 @@ public class AnimalBehaviour : MonoBehaviour
         {
             ShotOnLeg(damage);
         }
+       
         
     }
 

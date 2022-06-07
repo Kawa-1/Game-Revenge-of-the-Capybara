@@ -21,8 +21,6 @@ public class EndGame : MonoBehaviour
         time += Time.deltaTime;
         if (LevelSetting.isPointRaceMode)
         {
-            Debug.Log("race");
-
             if (playerController.getPoints() > pointsToEndGame)
            {
                DateBetwenScene.points = playerController.getPoints();
@@ -38,46 +36,35 @@ public class EndGame : MonoBehaviour
             if (LevelSetting.deerKill > LevelSetting.deerToKillAmount)
             {
                 LevelSetting.youLose = true;
-                Debug.Log("Loseeeeeeeeeeee1");
                 sceneSwitcher.youLoose();
             }
             if (LevelSetting.roeKill > LevelSetting.roeToKillAmount)
             {
                 LevelSetting.youLose = true;
-                Debug.Log("Loseeeeeeeeeeee2");
-
                 sceneSwitcher.youLoose();
 
             }
             if (LevelSetting.sheepKill > LevelSetting.sheepToKillAmount)
             {
                 LevelSetting.youLose = true;
-                Debug.Log("Loseeeeeeeeeeee3");
-
                 sceneSwitcher.youLoose();
 
             }
             if (LevelSetting.boarKill > LevelSetting.boarToKillAmount)
             {
                 LevelSetting.youLose = true;
-                Debug.Log("Loseeeeeeeeeeee4");
-
                 sceneSwitcher.youLoose();
 
             }
             
             if (LevelSetting.deerKill == LevelSetting.deerToKillAmount)
-            { Debug.Log("hunt1");
-
+            {
                 if (LevelSetting.roeKill == LevelSetting.roeToKillAmount)
-                { Debug.Log("hunt2");
-
+                {
                     if (LevelSetting.sheepKill == LevelSetting.sheepToKillAmount)
-                    { Debug.Log("hunt3");
-
+                    {
                         if (LevelSetting.boarKill == LevelSetting.boarToKillAmount)
-                        { Debug.Log("hunt4");
-
+                        {
                             DateBetwenScene.points = playerController.getPoints();
                             DateBetwenScene.time = this.time;
                             LevelSetting.youLose = false;

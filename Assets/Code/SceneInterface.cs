@@ -27,9 +27,6 @@ public class SceneInterface : MonoBehaviour
     private string sole;
     void Start()
     {
-
-       
-        
         if (LevelSetting.isBigHuntMode)
         {
             sole = "hunt";
@@ -39,7 +36,6 @@ public class SceneInterface : MonoBehaviour
         {
             sole = "race";
         }
-
         //PlayerPrefs.DeleteAll();
         if (PlayerPrefs.GetString("playersTable" + sole) == "")
         {
@@ -55,33 +51,6 @@ public class SceneInterface : MonoBehaviour
             PlayerPrefs.SetFloat("name9"+ sole,110000);
             PlayerPrefs.SetFloat("name10"+ sole,110000);
         }
-        
-        
-        /*
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.SetString("playersTable"+ "race","name1" + "race"+ ":name2" + "race"+ ":name3" + "race"+ ":name4" + "race"+ ":name5" + "race"+ ":name6" + "race"+ ":name7" + "race"+ ":name8" + "race"+ ":name9" + "race"+ ":name10" + "race"+ ":");
-        PlayerPrefs.SetFloat("name1" + "race",110000);
-        PlayerPrefs.SetFloat("name2"+ "race",110000);
-        PlayerPrefs.SetFloat("name3"+ "race",110000);
-        PlayerPrefs.SetFloat("name4"+ "race",110000);
-        PlayerPrefs.SetFloat("name5"+ "race",110000);
-        PlayerPrefs.SetFloat("name6"+ "race",110000);
-        PlayerPrefs.SetFloat("name7"+ "race",110000);
-        PlayerPrefs.SetFloat("name8"+ "race",110000);
-        PlayerPrefs.SetFloat("name9"+ "race",110000);
-        PlayerPrefs.SetFloat("name10"+ "race",110000);
-        PlayerPrefs.SetString("playersTable"+ "hunt","name11" +"hunt"+ ":name22" +"hunt"+ ":name33" +"hunt"+ ":name44" +"hunt"+ ":name55" +"hunt"+ ":name66" +"hunt"+ ":name77" +"hunt"+ ":name88" +"hunt"+ ":name99" +"hunt"+ ":name100" +"hunt"+ ":");
-        PlayerPrefs.SetFloat("name11"+ "hunt",10000);
-        PlayerPrefs.SetFloat("name22"+ "hunt",10000);
-        PlayerPrefs.SetFloat("name33"+ "hunt",10000);
-        PlayerPrefs.SetFloat("name44"+ "hunt",10000);
-        PlayerPrefs.SetFloat("name55"+ "hunt",10000);
-        PlayerPrefs.SetFloat("name66"+ "hunt",10000);
-        PlayerPrefs.SetFloat("name77"+ "hunt",10000);
-        PlayerPrefs.SetFloat("name88"+ "hunt",10000);
-        PlayerPrefs.SetFloat("name99"+ "hunt",10000);
-        PlayerPrefs.SetFloat("name100"+ "hunt",10000);
-        //*/
         newBigHuntGame.gameObject.SetActive(false);
         newRaceTimeGame.gameObject.SetActive(false);
         if (LevelSetting.isBigHuntMode)
@@ -146,11 +115,7 @@ public class SceneInterface : MonoBehaviour
     private void ReadSavedResult()
     {
         string playerTable = PlayerPrefs.GetString("playersTable"+ sole);
-        Debug.Log("=========");
-        Debug.Log(playerTable);
         playerTable= playerTable.Replace(sole, "");
-        Debug.Log("**********");
-        Debug.Log(playerTable);
         string tmp = null;
         foreach (var oneChar in playerTable)
         {

@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class PistolSeting : MonoBehaviour
 {
-    [SerializeField] private float maxDistanceWhereMaxDamage = 10;
-    [SerializeField] private float damageReductionFactor = 2;
-    [SerializeField] private float damage = 30;
+    [SerializeField] private float maxDistanceWhereMaxDamage = 20;
+    [SerializeField] private float damageReductionFactor = 1;
+    [SerializeField] private float damage = 100;
     [SerializeField] private RawImage aimingGunImage;
 
     public float MaxDistanceWhereMaxDamage
